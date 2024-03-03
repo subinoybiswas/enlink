@@ -9,6 +9,7 @@ import {
   FilesetResolver,
 } from "@mediapipe/tasks-vision";
 import options from "@/app/helpers/faceLandMarks";
+import { Preload, Loader } from "@react-three/drei";
 
 export default function VideoView() {
   let video: HTMLVideoElement;
@@ -75,6 +76,7 @@ export default function VideoView() {
   };
   return (
     <div className="flex justify-center content-center items-center bg-gradient-to-r from-blue-500 to-purple-500 rounded-3xl w-full min-h-[50%] md:max-w-xl z-20 border-[5px] dark:border-slate-200 border-slate-600">
+      <Loader />
       <video
         className="camera-feed hidden"
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
@@ -87,8 +89,14 @@ export default function VideoView() {
         camera={{ fov: 15 }}
         shadows
       >
+        <Preload all />
         <ambientLight intensity={0.5} />
-
+        <directionalLight
+          position={[10, 10, 10]}
+          color={new Color(1, 1, 1)}
+          intensity={0.5}
+          castShadow={true} // Enable shadow casting
+        />
         <pointLight
           position={[10, 10, 10]}
           color={new Color(1, 1, 0)}
