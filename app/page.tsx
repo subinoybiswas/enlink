@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import {
+  Category,
   FaceLandmarker,
   FaceLandmarkerOptions,
   FilesetResolver,
@@ -10,26 +11,18 @@ import { Canvas, useFrame, useGraph } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { useDropzone } from "react-dropzone";
 import { DotBackgroundDemo } from "./background";
-
+import options from "./helpers/faceLandMarks";
+interface AvatarProps {
+  url: string;
+  blendshapes: Category[] | undefined; // Assuming blendshapes is an array of objects
+  rotation: Euler | undefined;
+}
 let video: HTMLVideoElement;
 let faceLandmarker: FaceLandmarker;
 let lastVideoTime = -1;
-let blendshapes: any[] = [];
-let rotation: Euler;
+
 let headMesh: any[] = [];
-
-const options: FaceLandmarkerOptions = {
-  baseOptions: {
-    modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
-    delegate: "GPU",
-  },
-  numFaces: 1,
-  runningMode: "VIDEO",
-  outputFaceBlendshapes: true,
-  outputFacialTransformationMatrixes: true,
-};
-
-function Avatar({ url }: { url: string }) {
+function Avatar({ url, blendshapes, rotation }: AvatarProps) {
   const { scene } = useGLTF(url);
   const { nodes } = useGraph(scene);
 
@@ -42,8 +35,8 @@ function Avatar({ url }: { url: string }) {
   }, [nodes, url]);
 
   useFrame(() => {
-    if (blendshapes.length > 0) {
-      blendshapes.forEach((element) => {
+    if (blendshapes && blendshapes?.length > 0) {
+      blendshapes?.forEach((element) => {
         headMesh.forEach((mesh) => {
           let index = mesh.morphTargetDictionary[element.categoryName];
           if (index >= 0) {
@@ -51,18 +44,19 @@ function Avatar({ url }: { url: string }) {
           }
         });
       });
-
-      nodes.Head.rotation.set(rotation.x, rotation.y, rotation.z);
-      nodes.Neck.rotation.set(
-        rotation.x / 5 + 0.3,
-        rotation.y / 5,
-        rotation.z / 5
-      );
-      nodes.Spine2.rotation.set(
-        rotation.x / 10,
-        rotation.y / 10,
-        rotation.z / 10
-      );
+      if (rotation) {
+        nodes.Head.rotation.set(rotation.x, rotation.y, rotation.z);
+        nodes.Neck.rotation.set(
+          rotation.x / 5 + 0.3,
+          rotation.y / 5,
+          rotation.z / 5
+        );
+        nodes.Spine2.rotation.set(
+          rotation.x / 10,
+          rotation.y / 10,
+          rotation.z / 10
+        );
+      }
     }
   });
 
@@ -70,6 +64,8 @@ function Avatar({ url }: { url: string }) {
 }
 
 function App() {
+  const [blendshapes, setBlendshapes] = useState<Category[]>();
+  const [rotation, setRotation] = useState<Euler>();
   const [show, setShow] = useState<boolean>(false);
   const [url, setUrl] = useState<string>(
     "https://models.readyplayer.me/6460d95f9ae10f45bffb2864.glb?morphTargets=ARKit&textureAtlas=1024"
@@ -120,12 +116,12 @@ function App() {
         faceLandmarkerResult.faceBlendshapes.length > 0 &&
         faceLandmarkerResult.faceBlendshapes[0].categories
       ) {
-        blendshapes = faceLandmarkerResult.faceBlendshapes[0].categories;
+        setBlendshapes(faceLandmarkerResult.faceBlendshapes[0].categories);
 
         const matrix = new Matrix4().fromArray(
           faceLandmarkerResult.facialTransformationMatrixes![0].data
         );
-        rotation = new Euler().setFromRotationMatrix(matrix);
+        setRotation(new Euler().setFromRotationMatrix(matrix));
       }
     }
 
@@ -178,11 +174,12 @@ function App() {
             castShadow
           />
           <pointLight position={[0, 0, 10]} intensity={0.5} castShadow />
-          <Avatar url={url} />
+
+          <Avatar url={url} blendshapes={blendshapes} rotation={rotation} />
         </Canvas>
       </div>
 
-      <img className="logo" src="./logo.png" />
+      {/* <img className="logo" src="./logo.png" /> */}
     </div>
   );
 }
