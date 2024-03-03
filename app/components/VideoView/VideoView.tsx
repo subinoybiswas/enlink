@@ -75,7 +75,7 @@ export default function VideoView() {
     window.requestAnimationFrame(predict);
   };
   return (
-    <div className="flex justify-center content-center items-center bg-gradient-to-r from-blue-500 to-purple-500 rounded-3xl w-full min-h-[50%] md:max-w-xl z-20 border-[5px] dark:border-slate-200 border-slate-600">
+    <div className="flex justify-center content-center items-center bg-slate-900/80 rounded-3xl min-w-[300px] min-h-[300px] z-20 border-[5px] dark:border-slate-200 border-slate-600">
       <Loader />
       <video
         className="camera-feed hidden"
@@ -91,12 +91,12 @@ export default function VideoView() {
       >
         <Preload all />
         <ambientLight intensity={0.5} />
-        <directionalLight
+        {/* <directionalLight
           position={[10, 10, 10]}
           color={new Color(1, 1, 1)}
           intensity={0.5}
-          castShadow={true} // Enable shadow casting
-        />
+          castShadow // Enable shadow casting
+        /> */}
         <pointLight
           position={[10, 10, 10]}
           color={new Color(1, 1, 0)}
