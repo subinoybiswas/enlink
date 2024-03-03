@@ -11,13 +11,14 @@ import { useGLTF } from "@react-three/drei";
 import { useDropzone } from "react-dropzone";
 import { DotBackgroundDemo } from "./background";
 import options from "./helpers/faceLandMarks";
-import { Avatar } from "./components/Avatar";
+import { Avatar } from "./components/VideoView/components/Avatar";
+import VideoView from "./components/VideoView/VideoView";
 
 let video: HTMLVideoElement;
 let faceLandmarker: FaceLandmarker;
 let lastVideoTime = -1;
 
-const headMesh: any[] = [];
+// const headMesh: any[] = [];
 
 function App() {
   const [blendshapes, setBlendshapes] = useState<Category[]>();
@@ -105,43 +106,11 @@ function App() {
         placeholder="Paste RPM avatar URL"
         onChange={handleOnChange}
       /> */}
-
-      <div className="flex justify-center content-center bg-gradient-to-r from-blue-500 to-purple-500 rounded-3xl h-1/2 w-full md:w-1/2 md:h-1/2 z-20 border-[5px] dark:border-slate-200 border-slate-600">
-        <video className="camera-feed hidden " id="video" autoPlay></video>
-
-        <Canvas
-          style={{ height: "100%", width: "95%" }}
-          camera={{ fov: 20 }}
-          shadows
-        >
-          <ambientLight intensity={0.5} />
-
-          <pointLight
-            position={[10, 10, 10]}
-            color={new Color(1, 1, 0)}
-            intensity={0.5}
-            castShadow
-          />
-          <pointLight
-            position={[-10, 0, 10]}
-            color={new Color(1, 0, 0)}
-            intensity={0.5}
-            castShadow
-          />
-          <pointLight position={[0, 0, 10]} intensity={0.5} castShadow />
-
-          <Avatar
-            url={url}
-            blendshapes={blendshapes}
-            rotation={rotation}
-            // headMesh={headMesh}
-          />
-        </Canvas>
-        {/* <div className="reletive top-0 z-50">
-          <div className=" bg-white rounded-3xl">Hello</div>
-        </div> */}
-      </div>
-      {/* <img className="logo" src="./logo.png" /> */}
+      <VideoView
+        url={url}
+        blendshapes={blendshapes}
+        rotation={rotation}
+      ></VideoView>
     </div>
   );
 }

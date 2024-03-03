@@ -8,7 +8,7 @@ import {
 import { Euler } from "three";
 import { useFrame, useGraph } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
-interface AvatarProps {
+export interface AvatarProps {
   url: string;
   blendshapes: Category[] | undefined; // Assuming blendshapes is an array of objects
   rotation: Euler | undefined;
