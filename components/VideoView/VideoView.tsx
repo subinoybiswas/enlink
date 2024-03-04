@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Color, Euler, Matrix4 } from "three";
 import { Canvas } from "@react-three/fiber";
-import { Avatar, AvatarProps } from "./components/Avatar";
+import { Avatar, AvatarProps } from "./helper/Avatar";
 import {
   Category,
   FaceLandmarker,
