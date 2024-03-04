@@ -11,7 +11,11 @@ import {
 import options from "@/app/helpers/faceLandMarks";
 import { Preload, Loader } from "@react-three/drei";
 
-export default function VideoView() {
+export default function VideoView({
+  displayToggle,
+}: {
+  displayToggle: boolean;
+}) {
   let video: HTMLVideoElement;
   let faceLandmarker: FaceLandmarker;
   let lastVideoTime = -1;
@@ -75,39 +79,51 @@ export default function VideoView() {
     window.requestAnimationFrame(predict);
   };
   return (
-    <div className="flex justify-center content-center items-center bg-slate-900/80 rounded-3xl z-20 border-[5px] dark:border-slate-200 border-slate-600" style={{aspectRatio:16/9}}>
+    <div
+      className="flex justify-center content-center items-center bg-slate-900/80 rounded-3xl z-20 border-[5px] dark:border-slate-200 border-slate-600"
+      style={{ aspectRatio: 16 / 9 }}
+    >
       <Loader />
       <video
-        className="camera-feed hidden"
-        style={{ height: "100%", width: "100%", objectFit: "cover" }}
+        className="camera-feed"
+        style={{
+          height: "100%",
+          width: "100%",
+          objectFit: "cover",
+          borderRadius: "1.5rem",
+          display: displayToggle ? "none" : "",
+        }}
         id="video"
         autoPlay
       ></video>
+      {displayToggle ? (
+        <Canvas style={{ aspectRatio: 16 / 9 }} camera={{ fov: 15 }} shadows>
+          <Preload all />
+          <ambientLight intensity={0.8} />
 
-      <Canvas style={{ aspectRatio: 16 / 9 }} camera={{ fov: 15 }} shadows>
-        <Preload all />
-        <ambientLight intensity={0.8} />
-        
-        <pointLight
-          position={[10, 10, 10]}
-          color={new Color(1, 1, 0)}
-          intensity={0.5}
-          castShadow
-        />
-        <pointLight
-          position={[-10, 0, 10]}
-          color={new Color(1, 0, 0)}
-          intensity={0.5}
-          castShadow
-        />
-        <pointLight position={[0, 0, 10]} intensity={0.5} castShadow />
-        <Avatar
-          url={url}
-          blendshapes={blendshapes}
-          rotation={rotation}
-          // headMesh={headMesh}
-        />
-      </Canvas>
+          <pointLight
+            position={[10, 10, 10]}
+            color={new Color(1, 1, 0)}
+            intensity={0.5}
+            castShadow
+          />
+          <pointLight
+            position={[-10, 0, 10]}
+            color={new Color(1, 0, 0)}
+            intensity={0.5}
+            castShadow
+          />
+          <pointLight position={[0, 0, 10]} intensity={0.5} castShadow />
+          <Avatar
+            url={url}
+            blendshapes={blendshapes}
+            rotation={rotation}
+            // headMesh={headMesh}
+          />
+        </Canvas>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

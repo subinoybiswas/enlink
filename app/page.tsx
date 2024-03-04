@@ -8,9 +8,14 @@ import { Dropdown, DropdownMenu, DropdownItem } from "@nextui-org/react";
 import { Chip } from "@nextui-org/react";
 import { useTheme } from "next-themes";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { useState } from "react";
 // const headMesh: any[] = [];
 
 function App() {
+  const [displayToggle, setDisplayToggle] = useState(true);
+  const toggleVisibility = () => {
+    setDisplayToggle((prevIsVisible) => !prevIsVisible);
+  };
   return (
     <NextUIProvider>
       <NextThemesProvider attribute="class" defaultTheme="dark">
@@ -33,7 +38,7 @@ function App() {
             style={{ width: "50%", margin: "5px" }}
           >
             <h1 className="font-myFont text-3xl my-2">Setup your Meet</h1>
-            <div className="grid grid-flow-col gap-1 w-full   self-center place-items-center bg-slate-400/50 p-2 rounded-full">
+            <div className="grid grid-flow-col gap-1 w-full   self-center place-items-center bg-slate-400/50 p-2 rounded-3xl">
               <h2 className="justify-self-start mx-2 text-xl">
                 Subinoy Biswas
               </h2>
@@ -65,14 +70,15 @@ function App() {
                 </Dropdown>
               </div>
             </div>
-            <VideoView></VideoView>
-            <div className="grid grid-flow-col gap-1 w-1/4   self-center place-items-center bg-slate-400/50 p-2 rounded-full">
+            <VideoView displayToggle={displayToggle}></VideoView>
+            <div className="grid grid-flow-col gap-1 w-1/4   self-center place-items-center bg-slate-400/50 p-2 rounded-3xl">
               <Button
                 radius="full"
                 variant="faded"
                 isIconOnly
                 color="danger"
                 aria-label="Like"
+                onClick={toggleVisibility}
               >
                 <HeartIcon />
               </Button>
