@@ -12,7 +12,7 @@ export default function ControlPanel({
   visibility: boolean;
 }) {
   return (
-    <div className="grid grid-flow-col gap-1 w-1/4   self-center place-items-center bg-slate-400/50 p-2 rounded-3xl ">
+    <div className="grid grid-flow-col gap-1 min-w-1/4   self-center place-items-center bg-slate-400/50 p-2 rounded-3xl ">
       <Button
         radius="full"
         variant="faded"

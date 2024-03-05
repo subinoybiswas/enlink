@@ -1,7 +1,7 @@
 "use client";
 import VideoView from "../components/VideoView/VideoView";
 import { Divider } from "@mui/joy";
-import { Button, DropdownTrigger } from "@nextui-org/react";
+import { Avatar, Button, DropdownTrigger } from "@nextui-org/react";
 import { NextUIProvider } from "@nextui-org/react";
 import { HeartIcon } from "./assets/hearticon";
 import { Dropdown, DropdownMenu, DropdownItem } from "@nextui-org/react";
@@ -12,6 +12,8 @@ import { useState } from "react";
 import ControlPanel from "../components/ControlPanel/controlpanel";
 import { GiHamburgerMenu } from "react-icons/gi";
 import MyDropdownMenu from "./assets/dropdownmenu";
+import { Snippet } from "@nextui-org/react";
+import { User } from "@nextui-org/react";
 // const headMesh: any[] = [];
 
 function App() {
@@ -22,29 +24,31 @@ function App() {
   return (
     <NextUIProvider>
       <NextThemesProvider attribute="class" defaultTheme="dark">
-        <div className="h-screen w-full dark:bg-black bg-white  dark:bg-dot-white/[0.5] bg-dot-black/[0.5] relative flex flex-row  gap-5 z-20">
+        <div className="h-screen w-full dark:bg-black bg-white  dark:bg-dot-white/[0.5] bg-dot-black/[0.5] relative flex flex-row  gap-10 z-20 p-5">
           {/* Radial gradient for the container to give a faded look */}
           <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] z-[-1]"></div>
 
-          {/* <div {...getRootProps({ className: "dropzone" })}>
-        <p>Drag & drop RPM avatar GLB file here</p>
-        </div>
-      <input
-        className="url"
-        type="text"
-        placeholder="Paste RPM avatar URL"
-        onChange={handleOnChange}
-      /> */}
-
-          <div
-            className=" w-full flex flex-col text-center gap-2 content-center  font-myFont"
-            style={{ width: "50%", margin: "5px" }}
-          >
+          <div className=" w-1/2 flex flex-col text-center gap-2 content-center  font-myFont ">
             <h1 className="font-myFont text-3xl my-2">Setup your Meet</h1>
             <div className="grid grid-flow-col gap-1 w-full   self-center place-items-center bg-slate-400/50 p-2 rounded-3xl">
-              <h2 className="justify-self-start mx-2 text-xl">
-                Subinoy Biswas
-              </h2>
+              {/* <User
+                className="justify-self-start mx-2 text-xl"
+                name="Jane Doe"
+                avatarProps={{
+                  radius: "full",
+                  isBordered: true,
+                  color: "success",
+                  src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+                }}
+              /> */}
+              <div className="justify-self-start flex items-center text-center">
+                <Avatar
+                  className=" mx-2 "
+                  isBordered
+                  src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+                />
+                <h2 className=" mx-2 text-xl">Subinoy Biswas</h2>
+              </div>
               <div className="justify-self-end mx-2">
                 <MyDropdownMenu />
               </div>
@@ -55,6 +59,11 @@ function App() {
               toggleVisibility={toggleVisibility}
               visibility={displayToggle}
             />
+            <div className="absolute bottom-0 right-0 m-5">
+              <Snippet variant="bordered" size="lg" symbol="">
+                bfg-khj-oiy
+              </Snippet>
+            </div>
           </div>
           <div className="w-1/2">
             <p>

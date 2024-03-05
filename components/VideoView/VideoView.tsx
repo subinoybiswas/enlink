@@ -101,7 +101,7 @@ export default function VideoView({
       {displayToggle ? (
         <Canvas
           style={{ aspectRatio: 16 / 9, transform: "scaleX(-1)" }}
-          camera={{ fov: 15 }}
+          camera={{ fov: 14 }}
           shadows
         >
           <Preload all />
