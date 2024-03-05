@@ -1,4 +1,13 @@
 import React from "react";
+export interface IconProps {
+  fill?: string;
+  filled?: boolean;
+  size?: number;
+  height?: number;
+  width?: number;
+  label?: string;
+  [key: string]: any; // Allows for additional props
+}
 export const HeartIcon = ({
   fill = "currentColor",
   filled,
@@ -7,7 +16,7 @@ export const HeartIcon = ({
   width,
   label,
   ...props
-}) => {
+}: IconProps) => {
   return (
     <svg
       width={size || width || 24}

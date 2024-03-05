@@ -9,6 +9,7 @@ import { Chip } from "@nextui-org/react";
 import { useTheme } from "next-themes";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useState } from "react";
+import ControlPanel from "../components/ControlPanel/controlpanel";
 // const headMesh: any[] = [];
 
 function App() {
@@ -34,7 +35,7 @@ function App() {
       /> */}
 
           <div
-            className=" w-full flex flex-col text-center gap-2 content-center  "
+            className=" w-full flex flex-col text-center gap-2 content-center  font-myFont"
             style={{ width: "50%", margin: "5px" }}
           >
             <h1 className="font-myFont text-3xl my-2">Setup your Meet</h1>
@@ -70,37 +71,12 @@ function App() {
                 </Dropdown>
               </div>
             </div>
+
             <VideoView displayToggle={displayToggle}></VideoView>
-            <div className="grid grid-flow-col gap-1 w-1/4   self-center place-items-center bg-slate-400/50 p-2 rounded-3xl">
-              <Button
-                radius="full"
-                variant="faded"
-                isIconOnly
-                color="danger"
-                aria-label="Like"
-                onClick={toggleVisibility}
-              >
-                <HeartIcon />
-              </Button>
-              <Button
-                radius="full"
-                variant="faded"
-                isIconOnly
-                color="danger"
-                aria-label="Like"
-              >
-                <HeartIcon />
-              </Button>
-              <Button
-                radius="full"
-                variant="faded"
-                isIconOnly
-                color="danger"
-                aria-label="Like"
-              >
-                <HeartIcon />
-              </Button>
-            </div>
+            <ControlPanel
+              toggleVisibility={toggleVisibility}
+              visibility={displayToggle}
+            />
           </div>
           <div className="w-1/2">
             <p>

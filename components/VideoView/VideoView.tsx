@@ -92,12 +92,18 @@ export default function VideoView({
           objectFit: "cover",
           borderRadius: "1.5rem",
           display: displayToggle ? "none" : "",
+          transform: "scaleX(-1)",
+          aspectRatio: 16 / 9,
         }}
         id="video"
         autoPlay
       ></video>
       {displayToggle ? (
-        <Canvas style={{ aspectRatio: 16 / 9 }} camera={{ fov: 15 }} shadows>
+        <Canvas
+          style={{ aspectRatio: 16 / 9, transform: "scaleX(-1)" }}
+          camera={{ fov: 15 }}
+          shadows
+        >
           <Preload all />
           <ambientLight intensity={0.8} />
 
