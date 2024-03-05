@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Color, Euler, Matrix4 } from "three";
 import { Canvas } from "@react-three/fiber";
 import { Avatar, AvatarProps } from "./helper/Avatar";
@@ -31,7 +31,22 @@ export default function VideoView({
   useEffect(() => {
     setup();
   }, []);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const stream = canvas?.captureStream();
+    // Capture canvas as a MediaStream
+    let videoTrack: MediaStreamTrack;
+    if (stream && videoRef && videoRef.current) {
+      videoTrack = stream.getVideoTracks()[0];
+      videoRef.current.srcObject = new MediaStream([videoTrack]);
+    }
 
+    // You can now use the videoTrack in your calls or further processing
+
+    return () => {
+      videoTrack.stop(); // Don't forget to stop the video track when component unmounts
+    };
+  }, []);
   const setup = async () => {
     const filesetResolver = await FilesetResolver.forVisionTasks(
       "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm"
@@ -50,6 +65,7 @@ export default function VideoView({
       .then(function (stream) {
         video.srcObject = stream;
         video.addEventListener("loadeddata", predict);
+        video.style.transform = `scaleX(-1)`;
       });
   };
 
@@ -78,6 +94,9 @@ export default function VideoView({
 
     window.requestAnimationFrame(predict);
   };
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   return (
     <div
       className="flex justify-center content-center items-center bg-slate-900/80 rounded-3xl z-20 border-[5px] dark:border-slate-200 border-slate-600"
@@ -100,6 +119,7 @@ export default function VideoView({
       ></video>
       {displayToggle ? (
         <Canvas
+          ref={canvasRef}
           style={{ aspectRatio: 16 / 9, transform: "scaleX(-1)" }}
           camera={{ fov: 14 }}
           shadows
@@ -130,6 +150,14 @@ export default function VideoView({
       ) : (
         <></>
       )}
+      <video
+        height={"50px"}
+        width={"50px"}
+        ref={videoRef}
+        autoPlay
+        controls
+        style={{ transform: "scaleX(-1)", display: "none" }}
+      />
     </div>
   );
 }
