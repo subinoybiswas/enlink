@@ -10,6 +10,7 @@ import { useTheme } from "next-themes";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useState } from "react";
 import ControlPanel from "../components/ControlPanel/controlpanel";
+import { GiHamburgerMenu } from "react-icons/gi";
 // const headMesh: any[] = [];
 
 function App() {
@@ -50,10 +51,9 @@ function App() {
                       radius="full"
                       variant="faded"
                       isIconOnly
-                      color="danger"
                       aria-label="Like"
                     >
-                      <HeartIcon />
+                      <GiHamburgerMenu />
                     </Button>
                   </DropdownTrigger>
                   <DropdownMenu aria-label="Static Actions">

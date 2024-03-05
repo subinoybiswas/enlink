@@ -81,7 +81,7 @@ export default function VideoView({
   return (
     <div
       className="flex justify-center content-center items-center bg-slate-900/80 rounded-3xl z-20 border-[5px] dark:border-slate-200 border-slate-600"
-      style={{ aspectRatio: 16 / 9 }}
+      style={{ aspectRatio: 16 / 9, transition: "all 0.5s ease-in-out" }}
     >
       <Loader />
       <video
