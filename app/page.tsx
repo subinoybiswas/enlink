@@ -11,6 +11,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useState } from "react";
 import ControlPanel from "../components/ControlPanel/controlpanel";
 import { GiHamburgerMenu } from "react-icons/gi";
+import MyDropdownMenu from "./assets/dropdownmenu";
 // const headMesh: any[] = [];
 
 function App() {
@@ -45,30 +46,7 @@ function App() {
                 Subinoy Biswas
               </h2>
               <div className="justify-self-end mx-2">
-                <Dropdown>
-                  <DropdownTrigger>
-                    <Button
-                      radius="full"
-                      variant="faded"
-                      isIconOnly
-                      aria-label="Like"
-                    >
-                      <GiHamburgerMenu />
-                    </Button>
-                  </DropdownTrigger>
-                  <DropdownMenu aria-label="Static Actions">
-                    <DropdownItem key="new">New file</DropdownItem>
-                    <DropdownItem key="copy">Copy link</DropdownItem>
-                    <DropdownItem key="edit">Edit file</DropdownItem>
-                    <DropdownItem
-                      key="delete"
-                      className="text-danger"
-                      color="danger"
-                    >
-                      Delete file
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
+                <MyDropdownMenu />
               </div>
             </div>
 
