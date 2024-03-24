@@ -36,16 +36,6 @@ function App() {
           <div className=" w-[55%] flex flex-col text-center gap-2 content-center  font-myFont h-full">
             <h1 className="font-myFont text-3xl my-2">Setup your Meet</h1>
             <div className="grid grid-flow-col gap-1 w-full   self-center place-items-center bg-slate-400/50 p-2 rounded-3xl">
-              {/* <User
-                className="justify-self-start mx-2 text-xl"
-                name="Jane Doe"
-                avatarProps={{
-                  radius: "full",
-                  isBordered: true,
-                  color: "success",
-                  src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-                }}
-              /> */}
               <div className="justify-self-start flex items-center text-center">
                 <Avatar
                   className=" mx-2 "
