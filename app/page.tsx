@@ -1,6 +1,5 @@
 "use client";
 import VideoView from "../components/VideoView/VideoView";
-import { Divider } from "@mui/joy";
 import {
   Avatar,
   Button,
@@ -8,17 +7,11 @@ import {
   AvatarGroup,
 } from "@nextui-org/react";
 import { NextUIProvider } from "@nextui-org/react";
-import { HeartIcon } from "./assets/hearticon";
-import { Dropdown, DropdownMenu, DropdownItem } from "@nextui-org/react";
-import { Chip } from "@nextui-org/react";
-import { useTheme } from "next-themes";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useState } from "react";
 import ControlPanel from "../components/ControlPanel/controlpanel";
-import { GiHamburgerMenu } from "react-icons/gi";
 import MyDropdownMenu from "./assets/dropdownmenu";
 import { Snippet } from "@nextui-org/react";
-import { User } from "@nextui-org/react";
 // const headMesh: any[] = [];
 
 function App() {

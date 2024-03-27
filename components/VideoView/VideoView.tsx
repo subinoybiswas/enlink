@@ -30,7 +30,7 @@ export default function VideoView({
   };
   useEffect(() => {
     setup();
-  }, []);
+  });
   useEffect(() => {
     const canvas = canvasRef.current;
     const stream = canvas?.captureStream();
