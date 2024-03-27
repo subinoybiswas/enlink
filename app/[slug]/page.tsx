@@ -12,11 +12,16 @@ import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Snippet } from "@nextui-org/react";
 import { Avatar, DropdownTrigger, AvatarGroup } from "@nextui-org/react";
+import VideoView from "@/components/VideoView/VideoView";
 export default function MeetingPage({ params }: { params: { slug: string } }) {
   const [isSettingPanelOpen, setIsSettingPanelOpen] = useState(false);
 
   const toggleSettingPanel = () => {
     setIsSettingPanelOpen(!isSettingPanelOpen);
+  };
+  const [displayToggle, setDisplayToggle] = useState(true);
+  const toggleVisibility = () => {
+    setDisplayToggle((prevIsVisible) => !prevIsVisible);
   };
 
   return (
@@ -53,7 +58,9 @@ export default function MeetingPage({ params }: { params: { slug: string } }) {
                     className="flex-1"
                     style={{ transition: "all 0.5s ease-in-out" }}
                   >
-                    Body
+                    <div className="grid grid-flow-row-dense grid-cols-3 grid-rows-2">
+                      <VideoView displayToggle={displayToggle}></VideoView>
+                    </div>
                   </div>
                   <div
                     style={{
@@ -88,6 +95,7 @@ export default function MeetingPage({ params }: { params: { slug: string } }) {
                     variant="faded"
                     isIconOnly
                     aria-label="Like"
+                    onClick={toggleVisibility}
                   >
                     <HiSparkles size={20} />
                   </Button>
