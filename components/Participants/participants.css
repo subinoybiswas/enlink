@@ -1,0 +1,38 @@
+.video {
+  background-color: #353b48;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.participant {
+  background-color: #353b48;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  border-radius: 5px;
+  min-height: 200px;
+}
+.participants {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-size), 1fr);
+  grid-gap: 20px;
+  height: 85vh;
+  padding: 10px;
+  
+}
+
+.participants img {
+  border-radius: 50%;
+  height: 120px;
+  width: 120px;
+}
+
+@media (max-width: 800px) {
+  .participants {
+    grid-template-columns: repeat(var(--grid-col-size), 1fr);
+    grid-template-rows: repeat(var(--grid-row-size), 1fr);
+  }
+}

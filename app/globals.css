@@ -149,45 +149,50 @@ body {
   background-color: aliceblue;
   cursor: pointer;
 }
-.video {
-  background-color: #353b48;
-  height: 100%;
-  width: 100%;
-  position: relative;
-  object-fit: cover;
-  border-radius: 10px;
+
+.settings-wrapper {
+  opacity: 0;
+  overflow: hidden; /* Hide overflowing content during width animation */
 }
 
-.participant {
-  background-color: #353b48;
-  height: 100%;
-  width: 100%;
-  position: relative;
-  border-radius: 5px;
-  min-height: 200px;
-}
-.participants {
-  display: grid;
-  grid-template-columns: repeat(var(--grid-size), 1fr);
-  grid-gap: 20px;
-  height: 85vh;
-  padding: 10px;
+.animate-fade-in {
+  animation: fade-in 0.5s ease-in-out forwards;
 }
 
-.participants img {
-  border-radius: 50%;
-  height: 120px;
-  width: 120px;
+.animate-width {
+  animation: width-expand 0.5s ease-in-out forwards;
 }
 
-@media (max-width: 800px) {
-  .participants {
-    grid-template-columns: repeat(var(--grid-col-size), 1fr);
-    grid-template-rows: repeat(var(--grid-row-size), 1fr);
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
-@media (min-width: 1024px) {
-  .participants {
-    --grid-size: 2;
+
+@keyframes width-expand {
+  from {
+    width: 0;
+  }
+  to {
+    width: "400px"; /* You can adjust the width value as needed */
+  }
+}
+@media (max-width: 800px) {
+  .settings-wrapper {
+    top: 0;
+    position: fixed;
+    background-color: #7a42af;
+    min-height: 100vh;
+  }
+  @keyframes width-expand {
+    from {
+      height: 0;
+    }
+    to {
+      height: 100vh; /* You can adjust the width value as needed */
+    }
   }
 }
