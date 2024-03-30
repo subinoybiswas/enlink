@@ -64,7 +64,11 @@ export default function MeetingPage({ params }: { params: { slug: string } }) {
                 <div className="flex-1 flex flex-row">
                   <div
                     className={`flex-1 overflow-y-scroll ${
-                      isSettingPanelOpen ? "xl:mx-[10rem]" : ""
+                      isSettingPanelOpen
+                        ? height <= 720
+                          ? "xl:mx-[10rem]"
+                          : ""
+                        : ""
                     } `}
                     style={{ transition: "all 0.5s ease-in-out" }}
                   >
