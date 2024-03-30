@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@nextui-org/react";
 import { FaMicrophone, FaVideo } from "react-icons/fa";
 import { FiCamera } from "react-icons/fi";
@@ -13,6 +13,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Snippet } from "@nextui-org/react";
 import { Avatar, DropdownTrigger, AvatarGroup } from "@nextui-org/react";
 import VideoView from "@/components/VideoView/VideoView";
+import Card from "@/components/Card/Card";
 export default function MeetingPage({ params }: { params: { slug: string } }) {
   const [isSettingPanelOpen, setIsSettingPanelOpen] = useState(false);
 
@@ -23,6 +24,19 @@ export default function MeetingPage({ params }: { params: { slug: string } }) {
   const toggleVisibility = () => {
     setDisplayToggle((prevIsVisible) => !prevIsVisible);
   };
+  const VideoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    navigator.mediaDevices
+      .getUserMedia({
+        video: { width: 1280, height: 720 },
+        audio: false,
+      })
+      .then(function (stream) {
+        if (VideoRef.current) {
+          VideoRef.current.srcObject = stream;
+        }
+      });
+  });
 
   return (
     <div className="flex flex-col max-h-screen min-h-screen overflow-hidden">
@@ -58,8 +72,44 @@ export default function MeetingPage({ params }: { params: { slug: string } }) {
                     className="flex-1"
                     style={{ transition: "all 0.5s ease-in-out" }}
                   >
-                    <div className="grid grid-flow-row-dense grid-cols-3 grid-rows-2">
-                      <VideoView displayToggle={displayToggle}></VideoView>
+                    <div
+                      style={{
+                        "--grid-size": 2,
+                        "--grid-col-size": 1,
+                        "--grid-row-size": 3,
+                      }}
+                      className={`participants`}
+                    >
+                      <div className={`participant`}>
+                        <Card>
+                          <video
+                            ref={VideoRef}
+                            className="video"
+                            autoPlay
+                            playsInline
+                          ></video>
+                        </Card>
+                      </div>
+                      <div className={`participant`}>
+                        <Card>
+                          <video
+                            ref={VideoRef}
+                            className="video"
+                            autoPlay
+                            playsInline
+                          ></video>
+                        </Card>
+                      </div>
+                      <div className={`participant`}>
+                        <Card>
+                          <video
+                            ref={VideoRef}
+                            className="video"
+                            autoPlay
+                            playsInline
+                          ></video>
+                        </Card>
+                      </div>
                     </div>
                   </div>
                   <div
