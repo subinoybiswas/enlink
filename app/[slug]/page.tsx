@@ -50,7 +50,7 @@ export default function MeetingPage({ params }: { params: { slug: string } }) {
     };
   }, [VideoRef, userMediaStream]);
 
-  const refs = [VideoRef, VideoRef, VideoRef, VideoRef, VideoRef];
+  const refs = [VideoRef, VideoRef, VideoRef];
   return (
     <div className="flex flex-col max-h-screen min-h-screen overflow-hidden">
       <NextUIProvider>
@@ -63,9 +63,13 @@ export default function MeetingPage({ params }: { params: { slug: string } }) {
               <div className="flex flex-col bg-slate-400/40 flex-1 text-center rounded-3xl">
                 <div className="flex-1 flex flex-row">
                   <div
-                    className={`flex-1 overflow-y-scroll ${
+                    className={`flex-1 overflow-y-scroll sm:overflow-hidden ${
                       isSettingPanelOpen
                         ? height <= 720
+                          ? refs.length > 2 && refs.length <= 4
+                            ? "xl:mx-[15rem]"
+                            : ""
+                          : refs.length > 2 && refs.length <= 4
                           ? "xl:mx-[10rem]"
                           : ""
                         : ""
@@ -81,7 +85,7 @@ export default function MeetingPage({ params }: { params: { slug: string } }) {
                       display: isSettingPanelOpen ? "none" : "block",
                       transition: "width 0.5s ease-in-out",
                     }}
-                    className="settings-wrapper animate-fade-in animate-width"
+                    className="settings-wrapper animate-fade-in animate-width bg-slate-600/80 rounded-3xl m-5"
                   >
                     <div onClick={toggleSettingPanel}>Close</div>
                   </div>
