@@ -21,14 +21,26 @@ export const MeetingBottom = ({
   toggleVisibility,
   toggleSettingPanel,
   audioDevices,
+  videoDevices,
+  selectedCamera,
+  setSelectedCamera,
 }: {
   toggleVisibility: () => void;
   toggleSettingPanel: () => void;
   audioDevices: MediaDeviceInfo[];
+  videoDevices: MediaDeviceInfo[];
+  selectedCamera: MediaDeviceInfo | undefined;
+  setSelectedCamera: React.Dispatch<
+    React.SetStateAction<MediaDeviceInfo | undefined>
+  >;
 }) => {
   const initialSelectedKey = audioDevices[0].deviceId;
+
   const [selectedKeys, setSelectedKeys] = React.useState<any>(
     new Set([initialSelectedKey])
+  );
+  const [selectedKeys2, setSelectedKeys2] = React.useState<any>(
+    new Set([selectedCamera?.deviceId])
   );
 
   const selectedValue = React.useMemo(
@@ -64,9 +76,35 @@ export const MeetingBottom = ({
         >
           <HiSparkles size={20} />
         </Button>
-        <Button radius="full" variant="faded" isIconOnly aria-label="Like">
-          <FiCamera size={20} />
-        </Button>
+        <div className="flex flex-row items-center bg-slate-700/50 rounded-full">
+          <Button radius="full" variant="faded" isIconOnly aria-label="Like">
+            <FiCamera size={20} />
+          </Button>
+          <Dropdown>
+            <DropdownTrigger>
+              <div className="p-1">
+                <IoIosArrowUp></IoIosArrowUp>
+              </div>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Camera selection"
+              variant="flat"
+              disallowEmptySelection
+              selectionMode="single"
+              selectedKeys={selectedKeys2}
+              onSelectionChange={setSelectedKeys2}
+            >
+              {videoDevices.map((device) => (
+                <DropdownItem
+                  key={device.deviceId}
+                  onClick={() => setSelectedCamera(device)}
+                >
+                  {device.label}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
+        </div>
         <Button
           radius="full"
           variant="faded"

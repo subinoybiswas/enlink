@@ -19,33 +19,46 @@ export default function MeetingPage({ params }: { params: { slug: string } }) {
   };
   const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
   const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([]);
+  const [selectedCamera, setSelectedCamera] = useState<MediaDeviceInfo>();
   const VideoRef = useRef<HTMLVideoElement>(null);
   const userMediaStream = useMemo(() => {
     return navigator.mediaDevices.getUserMedia({
-      video: { width: 1280, height: 720 },
+      video: { width: 1280, height: 720, deviceId: selectedCamera?.deviceId },
       audio: false,
     });
-  }, []); // Empty dependency array ensures this runs only once when component mounts
+  }, [selectedCamera]); // Empty dependency array ensures this runs only once when component mounts
   console.log(height, width);
   useEffect(() => {
     setLoading(true);
+    const getDevices = async () => {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      setVideoDevices(devices.filter((device) => device.kind === "videoinput"));
+      setSelectedCamera(
+        devices.filter((device) => device.kind === "videoinput")[0]
+      );
+
+      setAudioDevices(
+        devices.filter((device) => device.kind === "audiooutput")
+      );
+      setLoading(false);
+    };
+    getDevices();
+  }, []);
+  useEffect(() => {
     const getUserMediaAndSetStream = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: 1280, height: 720 },
+          video: {
+            width: 1280,
+            height: 720,
+            deviceId: selectedCamera?.deviceId,
+          },
           audio: false,
         });
-        const devices = await navigator.mediaDevices.enumerateDevices();
-
-        setAudioDevices(
-          devices.filter((device) => device.kind === "audiooutput")
-        );
-        setVideoDevices(devices.filter((device) => device.kind === "videoinput"));
 
         if (VideoRef.current) {
-          VideoRef.current.srcObject = stream;
+          VideoRef.current.srcObject = stream; // Use 'stream' directly here
         }
-        setLoading(false);
       } catch (error) {
         console.error("Error accessing media devices:", error);
       }
@@ -54,13 +67,9 @@ export default function MeetingPage({ params }: { params: { slug: string } }) {
     getUserMediaAndSetStream();
 
     return () => {
-      userMediaStream.then((stream) => {
-        stream.getTracks().forEach((track) => {
-          track.stop();
-        });
-      });
+      // No need to stop tracks here, since they will be stopped when component unmounts
     };
-  }, [VideoRef, userMediaStream]);
+  }, [VideoRef, selectedCamera?.deviceId]);
 
   const refs = [VideoRef, VideoRef, VideoRef];
   return (
@@ -107,8 +116,11 @@ export default function MeetingPage({ params }: { params: { slug: string } }) {
                   </div>
                   <MeetingBottom
                     audioDevices={audioDevices}
+                    videoDevices={videoDevices}
                     toggleSettingPanel={toggleSettingPanel}
                     toggleVisibility={toggleVisibility}
+                    selectedCamera={selectedCamera}
+                    setSelectedCamera={setSelectedCamera}
                   ></MeetingBottom>
                 </div>
               </div>
