@@ -32,7 +32,7 @@ export const MeetingBottom = ({
   audioDevices: MediaDeviceInfo[];
   videoDevices: MediaDeviceInfo[];
   selectedCamera: MediaDeviceInfo | undefined;
-  seletecdAudio: MediaDeviceInfo | undefined;
+  selectedAudio: MediaDeviceInfo | undefined;
   setSelectedCamera: React.Dispatch<
     React.SetStateAction<MediaDeviceInfo | undefined>
   >;
