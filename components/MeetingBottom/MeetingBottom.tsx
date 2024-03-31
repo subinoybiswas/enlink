@@ -24,30 +24,28 @@ export const MeetingBottom = ({
   videoDevices,
   selectedCamera,
   setSelectedCamera,
+  setSelectedAudio,
+  selectedAudio,
 }: {
   toggleVisibility: () => void;
   toggleSettingPanel: () => void;
   audioDevices: MediaDeviceInfo[];
   videoDevices: MediaDeviceInfo[];
   selectedCamera: MediaDeviceInfo | undefined;
+  seletecdAudio: MediaDeviceInfo | undefined;
   setSelectedCamera: React.Dispatch<
     React.SetStateAction<MediaDeviceInfo | undefined>
   >;
+  setSelectedAudio: React.Dispatch<
+    React.SetStateAction<MediaDeviceInfo | undefined>
+  >;
 }) => {
-  const initialSelectedKey = audioDevices[0].deviceId;
-
   const [selectedKeys, setSelectedKeys] = React.useState<any>(
-    new Set([initialSelectedKey])
+    new Set([selectedAudio?.deviceId])
   );
   const [selectedKeys2, setSelectedKeys2] = React.useState<any>(
     new Set([selectedCamera?.deviceId])
   );
-
-  const selectedValue = React.useMemo(
-    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
-    [selectedKeys]
-  );
-  const array = audioDevices.map((device) => device.deviceId);
 
   return (
     <>
