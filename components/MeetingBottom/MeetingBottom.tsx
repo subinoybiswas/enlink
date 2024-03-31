@@ -1,17 +1,42 @@
-import { Avatar, Button, Snippet } from "@nextui-org/react";
+import {
+  Avatar,
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Select,
+  SelectItem,
+  Snippet,
+} from "@nextui-org/react";
+import React from "react";
+import { useState } from "react";
 import { FaMicrophone } from "react-icons/fa";
 import { FiCamera } from "react-icons/fi";
 import { HiSparkles } from "react-icons/hi";
 import { IoIosSettings } from "react-icons/io";
 import { MdCallEnd } from "react-icons/md";
-
+import { IoIosArrowUp } from "react-icons/io";
 export const MeetingBottom = ({
   toggleVisibility,
   toggleSettingPanel,
+  audioDevices,
 }: {
   toggleVisibility: () => void;
   toggleSettingPanel: () => void;
+  audioDevices: MediaDeviceInfo[];
 }) => {
+  const initialSelectedKey = audioDevices[0].deviceId;
+  const [selectedKeys, setSelectedKeys] = React.useState<any>(
+    new Set([initialSelectedKey])
+  );
+
+  const selectedValue = React.useMemo(
+    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
+    [selectedKeys]
+  );
+  const array = audioDevices.map((device) => device.deviceId);
+
   return (
     <>
       <div className="absolute bottom-0 right-0 m-8 select-none hidden sm:block">
@@ -52,18 +77,43 @@ export const MeetingBottom = ({
         >
           <MdCallEnd size={20} />
         </Button>
-        <Button radius="full" variant="faded" isIconOnly aria-label="Like">
-          <FaMicrophone size={20} />
-        </Button>
-        <Button
-          radius="full"
-          variant="faded"
-          isIconOnly
-          aria-label="Like"
-          onClick={toggleSettingPanel}
-        >
-          <IoIosSettings size={20} />
-        </Button>
+        <div className="flex flex-row items-center bg-slate-700/50 rounded-full">
+          <Button radius="full" variant="faded" isIconOnly aria-label="Like">
+            <FaMicrophone size={20} />
+          </Button>
+          <Dropdown>
+            <DropdownTrigger>
+              <div className="p-1">
+                <IoIosArrowUp></IoIosArrowUp>
+              </div>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Microphone selection"
+              variant="flat"
+              disallowEmptySelection
+              selectionMode="single"
+              selectedKeys={selectedKeys}
+              onSelectionChange={setSelectedKeys}
+            >
+              {audioDevices.map((device) => (
+                <DropdownItem key={device.deviceId}>
+                  {device.label}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+        <div>
+          <Button
+            radius="full"
+            variant="faded"
+            isIconOnly
+            aria-label="Like"
+            onClick={toggleSettingPanel}
+          >
+            <IoIosSettings size={20} />
+          </Button>
+        </div>
       </div>
     </>
   );
