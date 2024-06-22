@@ -26,6 +26,12 @@ export default function VideoView({
   const [url, setUrl] = useState<string>(
     "https://models.readyplayer.me/6460d95f9ae10f45bffb2864.glb?morphTargets=ARKit&textureAtlas=1024"
   );
+  const avatarRef = createRef<HTMLCanvasElement>();
+  const recordButtonRef = useRef(null);
+
+  const [recordedBlobs, setRecordedBlobs] = useState<Blob[]>([]);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder>();
+  const [stream, setStream] = useState<MediaStream>();
 
   useEffect(() => {
     const setup = async () => {
@@ -37,13 +43,16 @@ export default function VideoView({
         options
       );
 
-      video = document.getElementById("video") as HTMLVideoElement;
+      video = document.getElementById("vid") as HTMLVideoElement;
       navigator.mediaDevices
         .getUserMedia({
           video: { width: 1280, height: 720 },
           audio: false,
         })
         .then(function (stream) {
+          stream.addEventListener("loadeddata", () => {
+            console.log("loadeddata");
+          });
           video.srcObject = stream;
           video.addEventListener("loadeddata", predict);
           video.style.transform = `scaleX(-1)`;
@@ -51,6 +60,20 @@ export default function VideoView({
     };
 
     setup();
+
+    const canvas = avatarRef.current;
+    // Capture stream from canvas
+    const canvasStream = canvas?.captureStream();
+    setStream(canvasStream);
+
+    return () => {
+      if (mediaRecorder) {
+        mediaRecorder.stop();
+      }
+      if (canvasStream) {
+        canvasStream.getTracks().forEach((track) => track.stop());
+      }
+    };
   }, []);
 
   const predict = async () => {
@@ -78,28 +101,6 @@ export default function VideoView({
 
     window.requestAnimationFrame(predict);
   };
-  const avatarRef = createRef<HTMLCanvasElement>();
-  const recordButtonRef = useRef(null);
-
-  const [recordedBlobs, setRecordedBlobs] = useState<Blob[]>([]);
-  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder>();
-  const [stream, setStream] = useState<MediaStream>();
-
-  useEffect(() => {
-    const canvas = avatarRef.current;
-    // Capture stream from canvas
-    const canvasStream = canvas?.captureStream();
-    setStream(canvasStream);
-
-    return () => {
-      if (mediaRecorder) {
-        mediaRecorder.stop();
-      }
-      if (canvasStream) {
-        canvasStream.getTracks().forEach((track) => track.stop());
-      }
-    };
-  }, []);
 
   const handleDataAvailable = (event: any) => {
     if (event.data && event.data.size > 0) {
@@ -119,7 +120,7 @@ export default function VideoView({
   };
 
   const startRecording = () => {
-    let options = { mimeType: "video/webm" };
+    let options = { mimeType: "video/webm", videoBitsPerSecond: 2500000 };
     setRecordedBlobs([]);
     try {
       if (stream === undefined) {
@@ -153,7 +154,7 @@ export default function VideoView({
     }
     mediaRecorder.stop();
     console.log("Recorded Blobs: ", recordedBlobs);
-    const blob = new Blob(recordedBlobs, { type: "video/webm" });
+    const blob = new Blob(recordedBlobs, { type: "video/mp4" });
     const url = window.URL.createObjectURL(blob);
     console.log("url", url);
     // videoRef.current.controls = true;
@@ -175,9 +176,8 @@ export default function VideoView({
       </button>
 
       <br />
-      <video width={500} height={600} controls />
+
       <video
-        className="camera-feed"
         style={{
           height: "100%",
           width: "100%",
@@ -186,41 +186,45 @@ export default function VideoView({
           display: displayToggle ? "none" : "",
           transform: "scaleX(-1)",
           aspectRatio: 16 / 9,
+          position: "relative",
+          zIndex: 2,
         }}
-        id="video"
+        id="vid"
         autoPlay
       ></video>
       {displayToggle ? (
-        <Canvas
-          ref={avatarRef}
-          style={{ aspectRatio: 16 / 9, transform: "scaleX(-1)" }}
-          camera={{ fov: 14 }}
-          shadows
-        >
-          <Preload all />
-          <ambientLight intensity={0.8} />
-          <pointLight
-            position={[10, 10, 10]}
-            color={new Color(1, 1, 0)}
-            intensity={0.5}
-            castShadow
-          />
-          <pointLight
-            position={[-10, 0, 10]}
-            color={new Color(1, 0, 0)}
-            intensity={0.5}
-            castShadow
-          />
-          <pointLight position={[0, 0, 10]} intensity={0.5} castShadow />
-          {blendshapes && rotation && (
-            <Avatar
-              url={url}
-              blendshapes={blendshapes}
-              rotation={rotation}
-              // headMesh={headMesh}
+ 
+          <Canvas
+            ref={avatarRef}
+            style={{ aspectRatio: 16 / 9, transform: "scaleX(-1)" ,height: "400px", width: "600px"}}
+            camera={{ fov: 14 }}
+            shadows
+          >
+            <Preload all />
+            <ambientLight intensity={0.8} />
+            <pointLight
+              position={[10, 10, 10]}
+              color={new Color(1, 1, 0)}
+              intensity={0.5}
+              castShadow
             />
-          )}
-        </Canvas>
+            <pointLight
+              position={[-10, 0, 10]}
+              color={new Color(1, 0, 0)}
+              intensity={0.5}
+              castShadow
+            />
+            <pointLight position={[0, 0, 10]} intensity={0.5} castShadow />
+            {blendshapes && rotation && (
+              <Avatar
+                url={url}
+                blendshapes={blendshapes}
+                rotation={rotation}
+                // headMesh={headMesh}
+              />
+            )}
+          </Canvas>
+  
       ) : (
         <></>
       )}
